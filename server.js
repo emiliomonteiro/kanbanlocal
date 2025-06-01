@@ -2,7 +2,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 
-// Mime types for different file extensions
+// Tipos para diferentes extensões de arquivo
 const mimeTypes = {
     '.html': 'text/html',
     '.css': 'text/css',
@@ -15,53 +15,53 @@ const mimeTypes = {
     '.ico': 'image/x-icon'
 };
 
-// Create the server
+// Cria o servidor
 const server = http.createServer((req, res) => {
     console.log(`Request: ${req.url}`);
     
-    // Parse URL
+    // Analisa URL
     let filePath = '.' + req.url;
     if (filePath === './') {
         filePath = './index.html';
     }
     
-    // Get the file extension
+    // Obtém a extensão do arquivo
     const extname = path.extname(filePath);
     const contentType = mimeTypes[extname] || 'application/octet-stream';
     
-    // Read the file
+    // Lê o arquivo
     fs.readFile(filePath, (error, content) => {
         if (error) {
             if (error.code === 'ENOENT') {
-                // File not found
+                // Arquivo não encontrado
                 fs.readFile('./index.html', (err, content) => {
                     if (err) {
-                        // If even the index.html is not found, return 500
+                        // Se mesmo o index.html não for encontrado, retorna 500
                         res.writeHead(500);
                         res.end('Error: ' + err.code);
                     } else {
-                        // Serve index.html for all routes (SPA support)
+                        // Serve index.html para todas as rotas (suporte a SPA)
                         res.writeHead(200, { 'Content-Type': 'text/html' });
                         res.end(content, 'utf-8');
                     }
                 });
             } else {
-                // Server error
+                // Erro do servidor
                 res.writeHead(500);
                 res.end('Error: ' + error.code);
             }
         } else {
-            // Success
+            // Sucesso
             res.writeHead(200, { 'Content-Type': contentType });
             res.end(content, 'utf-8');
         }
     });
 });
 
-// Port configuration
+// Configuração da porta
 const port = process.env.PORT || 3000;
 
-// Start the server
+// Inicia o servidor
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
     console.log('Press Ctrl+C to stop the server');
