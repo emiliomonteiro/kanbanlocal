@@ -11,16 +11,16 @@ export function initAuth() {
     // Cria usuário admin padrão caso não existam usuários
     if (!localStorage.getItem('users')) {
         const defaultAdmin = {
-            email: 'admin@taskflow.com',
-            name: 'Admin User',
-            password: 'admin123', // Em um app real, a senha seria criptografada
+            email: 'emilio@taskflow.com',
+            name: 'Emilio Monteiro',
+            password: 'emilio123', // Em um app real, a senha seria criptografada
             role: 'admin',
-            position: 'System Administrator',
-            birthday: '1990-01-01'
+            position: 'Administrador do Sistema',
+            birthday: '1993-11-26'
         };
         
         localStorage.setItem('users', JSON.stringify([defaultAdmin]));
-        showToast('Usuário admin padrão criado: admin@taskflow.com / admin123', 'info');
+        showToast('Usuário admin padrão criado: emilio@taskflow.com / emilio123', 'info');
     }
     
     // Alterna entre os formulários de login e registro
