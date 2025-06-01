@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Kanban Board</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/board.css">
+    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Views -->
+        <div id="auth-container" class="view">
+            <div class="auth-box">
+                <div class="auth-header">
+                    <h1>TaskFlow</h1>
+                    <p>Your personal Kanban board</p>
+                </div>
+                <div id="login-form" class="auth-form">
+                    <h2>Login</h2>
+                    <form id="form-login">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" required placeholder="your@email.com">
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" required placeholder="••••••••">
+                            <div class="error-message"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <p class="form-link">Don't have an account? <a href="#" id="show-register">Register</a></p>
+                </div>
+
+                <div id="register-form" class="auth-form hidden">
+                    <h2>Register</h2>
+                    <form id="form-register">
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" required placeholder="your@email.com">
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-name">Full Name</label>
+                            <input type="text" id="register-name" required placeholder="John Doe">
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" required placeholder="••••••••">
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-birthday">Birthday</label>
+                            <input type="date" id="register-birthday">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-position">Position</label>
+                            <input type="text" id="register-position" placeholder="Software Developer">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                    <p class="form-link">Already have an account? <a href="#" id="show-login">Login</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Views -->
+        <div id="app-container" class="view hidden">
+            <header class="app-header">
+                <div class="header-left">
+                    <h1>TaskFlow</h1>
+                </div>
+                <div class="header-middle">
+                    <div class="search-container">
+                        <input type="text" id="search-tasks" placeholder="Search tasks...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="btn-import" class="btn btn-outline">Import</button>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="user-avatar"></div>
+                        <div class="user-menu hidden" id="user-menu">
+                            <div class="user-info">
+                                <p id="user-name">User Name</p>
+                                <p id="user-email">user@example.com</p>
+                            </div>
+                            <ul>
+                                <li><a href="#" id="profile-link">Profile</a></li>
+                                <li><a href="#" id="admin-link" class="admin-only hidden">Admin Panel</a></li>
+                                <li><a href="#" id="logout-link">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <!-- Board View -->
+                <div id="board-view" class="view-content">
+                    <div class="board-header">
+                        <h2>My Board</h2>
+                        <button id="btn-add-task" class="btn btn-primary">+ Add Task</button>
+                    </div>
+                    <div class="board-container">
+                        <div class="column" id="todo-column">
+                            <div class="column-header">
+                                <h3>To Do</h3>
+                                <span class="task-count" id="todo-count">0</span>
+                            </div>
+                            <div class="task-list" id="todo-tasks"></div>
+                        </div>
+                        <div class="column" id="progress-column">
+                            <div class="column-header">
+                                <h3>In Progress</h3>
+                                <span class="task-count" id="progress-count">0</span>
+                            </div>
+                            <div class="task-list" id="progress-tasks"></div>
+                        </div>
+                        <div class="column" id="done-column">
+                            <div class="column-header">
+                                <h3>Done</h3>
+                                <span class="task-count" id="done-count">0</span>
+                            </div>
+                            <div class="task-list" id="done-tasks"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin View -->
+                <div id="admin-view" class="view-content hidden">
+                    <div class="admin-header">
+                        <h2>Admin Dashboard</h2>
+                        <button id="btn-back-to-board" class="btn btn-outline">Back to Board</button>
+                    </div>
+                    <div class="admin-content">
+                        <div class="admin-stats">
+                            <div class="stat-card">
+                                <h3>Total Users</h3>
+                                <p id="stat-total-users">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Total Tasks</h3>
+                                <p id="stat-total-tasks">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Completed Tasks</h3>
+                                <p id="stat-completed-tasks">0</p>
+                            </div>
+                        </div>
+                        <div class="admin-users">
+                            <h3>User Management</h3>
+                            <table id="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Position</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile View -->
+                <div id="profile-view" class="view-content hidden">
+                    <div class="profile-header">
+                        <h2>My Profile</h2>
+                        <button id="btn-back-from-profile" class="btn btn-outline">Back to Board</button>
+                    </div>
+                    <div class="profile-content">
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="profile-email">Email</label>
+                                <input type="email" id="profile-email" required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-name">Full Name</label>
+                                <input type="text" id="profile-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-birthday">Birthday</label>
+                                <input type="date" id="profile-birthday">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-position">Position</label>
+                                <input type="text" id="profile-position">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="hidden"></div>
+
+    <!-- Task Modal -->
+    <div id="task-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="task-modal-title">Add New Task</h2>
+                <button id="btn-close-task-modal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <input type="hidden" id="task-id">
+                    <div class="form-group">
+                        <label for="task-title">Title</label>
+                        <input type="text" id="task-title" required placeholder="Enter task title">
+                        <div class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description" rows="3" placeholder="Enter task description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Due Date</label>
+                        <input type="date" id="task-due-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-status">Status</label>
+                        <select id="task-status">
+                            <option value="todo">To Do</option>
+                            <option value="progress">In Progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subtasks</label>
+                        <div id="subtasks-container"></div>
+                        <button type="button" id="btn-add-subtask" class="btn btn-outline btn-sm">+ Add Subtask</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-delete-task" class="btn btn-danger hidden">Delete</button>
+                        <button type="submit" id="btn-save-task" class="btn btn-primary">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import Tasks</h2>
+                <button id="btn-close-import-modal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-options">
+                    <button id="btn-import-api" class="btn btn-outline">Import from JSONPlaceholder</button>
+                    <div class="divider">OR</div>
+                    <div class="file-upload">
+                        <label for="import-file" class="btn btn-outline">Upload JSON File</label>
+                        <input type="file" id="import-file" accept=".json" class="hidden">
+                        <span id="file-name"></span>
+                    </div>
+                </div>
+                <div id="import-status" class="hidden">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="import-progress"></div>
+                    </div>
+                    <p id="import-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-start-import" class="btn btn-primary">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="user-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <button id="btn-close-user-modal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="user-form">
+                    <input type="hidden" id="edit-user-id">
+                    <div class="form-group">
+                        <label for="edit-user-email">Email</label>
+                        <input type="email" id="edit-user-email" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-name">Name</label>
+                        <input type="text" id="edit-user-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-position">Position</label>
+                        <input type="text" id="edit-user-position">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-role">Role</label>
+                        <select id="edit-user-role">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-delete-user" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+/* Auth Styles */
+.auth-box {
+    background-color: var(--color-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 450px;
+    padding: var(--space-8);
+    margin: 0 auto;
+}
+
+#auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.auth-header h1 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+}
+
+.auth-header p {
+    color: var(--color-text-light);
+}
+
+.auth-form {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.auth-form h2 {
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: var(--space-4);
+    font-size: 0.875rem;
+}
+
+.auth-form .btn {
+    width: 100%;
+    margin-top: var(--space-2);
+}
+
+/* Password strength meter */
+.password-strength {
+    margin-top: var(--space-2);
+}
+
+.strength-meter {
+    height: 4px;
+    display: flex;
+    margin-bottom: var(--space-1);
+}
+
+.strength-meter span {
+    flex: 1;
+    height: 100%;
+    margin-right: 2px;
+    border-radius: 2px;
+    background-color: var(--color-border);
+}
+
+.strength-meter span:last-child {
+    margin-right: 0;
+}
+
+.strength-meter.weak span:nth-child(1) {
+    background-color: var(--color-error);
+}
+
+.strength-meter.medium span:nth-child(1),
+.strength-meter.medium span:nth-child(2) {
+    background-color: var(--color-warning);
+}
+
+.strength-meter.strong span:nth-child(1),
+.strength-meter.strong span:nth-child(2),
+.strength-meter.strong span:nth-child(3) {
+    background-color: var(--color-success);
+}
+
+.strength-text {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.strength-text.weak {
+    color: var(--color-error);
+}
+
+.strength-text.medium {
+    color: var(--color-warning);
+}
+
+.strength-text.strong {
+    color: var(--color-success);
+}
+
+/* Responsive auth */
+@media (max-width: 480px) {
+    .auth-box {
+        width: 95%;
+        padding: var(--space-6) var(--space-4);
+    }
+}
